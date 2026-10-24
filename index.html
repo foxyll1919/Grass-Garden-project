@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"><title>草原 Grass Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&text=草原&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&text=Created%20with%20love%20by%20Suyash&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>
 *{margin:0;box-sizing:border-box}html,body{height:100%;background:#e4ecb4}
 .hero{position:relative;height:100svh;overflow:hidden;background:radial-gradient(85% 60% at 55% 40%,#fcf9d4,rgba(252,249,212,0) 80%),#e4ecb4;font-family:'Shippori Mincho B1',serif}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}
+#gh{pointer-events:none;z-index:1}
+.foot{position:absolute;right:clamp(18px,3.2vw,48px);bottom:4svh;z-index:2;pointer-events:none;font-family:'Sora',sans-serif;font-weight:400;font-size:clamp(11px,1.5vh,14px);letter-spacing:.06em;color:#1f4d12;text-shadow:0 0 18px #f5f8d6,0 0 36px #f5f8d6,0 0 6px #f5f8d6;animation:fade .9s ease 1.1s both}.foot b{font-weight:600}
+.foot a{position:relative;display:inline-block;color:inherit;text-decoration:none;pointer-events:auto;cursor:pointer}.foot a:focus-visible{outline:none}
+
+
+
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #grain{will-change:transform;position:absolute;inset:0;mix-blend-mode:multiply;opacity:.28;pointer-events:none;z-index:3}
-.col{position:absolute;top:4svh;bottom:4svh;display:flex;flex-direction:column;align-items:center;gap:2.2svh;color:#b8132e;pointer-events:none;z-index:2}
+.col{position:absolute;top:4svh;bottom:4svh;display:flex;flex-direction:column;align-items:center;gap:2.2svh;color:#1f4d12;pointer-events:none;z-index:2}
 .l{left:clamp(18px,3.2vw,48px)}.r{right:clamp(18px,3.2vw,48px)}
-.v{writing-mode:vertical-rl;text-orientation:upright;text-shadow:0 0 18px #f6efe2,0 0 36px #f6efe2,0 0 6px #f6efe2;font-weight:800;white-space:nowrap}
+.v{writing-mode:vertical-rl;text-orientation:upright;text-shadow:0 0 18px #f5f8d6,0 0 36px #f5f8d6,0 0 6px #f5f8d6;font-weight:800;white-space:nowrap}
 .v span{display:inline-block;animation:drop .9s cubic-bezier(.25,1.6,.45,1) both;animation-delay:calc(.25s + var(--i)*80ms)}
 @keyframes drop{from{transform:translateY(-60px);opacity:0}to{transform:none;opacity:1}}
 h1.big{font-size:clamp(64px,10.5vh,150px);letter-spacing:.06em;line-height:1}
@@ -19,12 +29,14 @@ h1.big{font-size:clamp(64px,10.5vh,150px);letter-spacing:.06em;line-height:1}
 .hanko{margin-top:auto;width:clamp(38px,5vh,56px);aspect-ratio:1;background:#b8132e;color:#efe5d3;border-radius:18%;display:grid;place-items:center;font-weight:800;font-size:clamp(24px,3.2vh,36px);transform:rotate(-3deg);animation:stamp .7s cubic-bezier(.25,1.6,.45,1) .65s both}
 @keyframes stamp{from{transform:translateY(-50px) scale(1.5) rotate(-14deg);opacity:0}to{transform:rotate(-3deg);opacity:1}}
 @media(max-width:699px){h1.big{font-size:clamp(44px,13vw,64px)}.mid{font-size:clamp(22px,6.6vw,30px)}.sm{display:none}}
-@media(prefers-reduced-motion:reduce){.v span,.hanko{animation:none}}
+@media(prefers-reduced-motion:reduce){.v span,.hanko,.foot{animation:none}}
 </style></head><body>
 <main class="hero">
 <canvas id="c" tabindex="0" role="img" aria-label="Grid of grass tufts. Hover or tap a tuft to make it whip and spring back. Use arrow keys to choose a nearby tuft and Space or Enter to whip it."></canvas>
+<canvas id="gh" aria-hidden="true"></canvas>
 <div id="grain"></div>
-<h1 class="sr">草原 — Grass Field</h1>
+<div class="col l"><h1 class="v big" data-s>草原</h1></div>
+<p class="foot"><a href="https://github.com/foxyll1919" target="_blank" rel="noopener noreferrer" aria-label="Created with love by Suyash (opens GitHub profile)">Created with love by <b>Suyash</b></a></p>
 </main>
 <script>
 document.querySelectorAll('[data-s]').forEach(e=>{const t=e.textContent;e.setAttribute('aria-label',t);e.textContent='';[...t].forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch;s.style.setProperty('--i',i);s.setAttribute('aria-hidden','true');e.appendChild(s)})});
@@ -32,6 +44,9 @@ document.querySelectorAll('[data-s]').forEach(e=>{const t=e.textContent;e.setAtt
 const g=document.createElement('canvas');g.width=g.height=200;const x=g.getContext('2d'),im=x.createImageData(200,200);
 for(let i=0;i<40000;i++){const v=170+Math.random()*85;im.data[i*4]=v;im.data[i*4+1]=v*.94;im.data[i*4+2]=v*.86;im.data[i*4+3]=Math.random()<.38?255:0}
 x.putImageData(im,0,0);document.getElementById('grain').style.backgroundImage='url('+g.toDataURL()+')'})();
+
+
+
 
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const R=.53,D0=2.6,FZ=2,ZS=.4,RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -127,5 +142,58 @@ cv.addEventListener('keydown',e=>{const d={ArrowLeft:[-1,0],ArrowRight:[1,0],Arr
 cv.addEventListener('blur',()=>{kb=false;fullNext=true;wake()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0}else wake()});
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(layout,120)});
+/* grasshopper: stippled pixel sprite that hops toward the cursor */
+(()=>{
+const gc=document.getElementById('gh'),g=gc.getContext('2d'),PPU=56,SW=Math.ceil(3.3*PPU),SH=Math.ceil(1.9*PPU),CX=1.85*PPU,CY=1.2*PPU,lp=(a,b,t)=>a+(b-a)*t;
+let GW=0,GH=0,GD=1,px=innerWidth*.72,py=innerHeight*.8,face=-1,st='idle',stT=0,an=0,anT=0,hop=null,tgt=null,raf2=0,lst=0,quiet=0,gT=0,hu=0,alt=0,vx=0,vy=0,fl=0;
+function parts(c,a,an,w){const d=.1*c,kx=lp(lp(-.75,-.8,c),-1,a),ky=lp(lp(-.12,-.3,c),.18,a)+d*(1-a),fx=lp(-.35,-1.7,a),fy=.42-.04*a,ff=[lp(.5,.62,a),lp(.42,.12,a)],mf=[lp(.08,.25,a),lp(.42,.22,a)];
+ const hind=(ox,oy,t)=>({p:[[-.3+ox,.1+d+oy,.14],[kx+ox,ky+oy,.07],[fx+ox,fy+oy,.03]],t});
+ return[...(w?[{p:w===1?[[-.05,-.17+d,.06],[-.2,-.55+d,.13],[-.45,-.9+d,.03]]:[[-.05,-.17+d,.06],[-.45,-.1+d,.13],[-1.05,.2+d,.03]],t:.6,al:.45}]:[]),{p:[[.2,.12+d,.04],[.35,.3,.035],[ff[0]-.05,ff[1],.025]],t:.3},hind(.06,-.04,.32),
+ {p:[[-1,.04+d,.13],[-.55,.02+d,.19],[-.15,d,.21],[.35,-.03+d,.21]],t:.05,lit:1},
+ w?{p:w===1?[[-.1,-.17+d,.07],[-.35,-.6+d,.16],[-.7,-.98+d,.03]]:[[-.1,-.17+d,.07],[-.5,-.05+d,.16],[-1.25,.22+d,.03]],t:.82,al:.6}:{p:[[-.1,-.16+d,.07],[-.6,-.12+d,.09],[-1.2,-.02+d,.03]],t:.5},
+ {p:[[.42,d,.2],[.66,.08+d,.17]],t:.1,lit:1},{p:[[.6,-.02+d,.07],[.6,-.02+d,.07]],t:.95},
+ {p:[[.3,.15+d,.045],[.42,.3,.04],[ff[0],ff[1],.028]],t:.5},{p:[[0,.15+d,.045],[.05,.3,.04],[mf[0],mf[1],.028]],t:.5},hind(0,0,.58),
+ {p:[[.68,-.04+d,.028],[.95,-.28+d+.05*an,.02],[1.35,-.45+d+.14*an,.01]],t:.7},
+ {p:[[.7,d,.025],[.92,-.2+d+.05*an,.018],[1.2,-.5+d+.1*an,.01]],t:.7}]}
+const GSP=new Map();
+function gsprite(k,soft){const key=k+'|'+soft;if(GSP.has(key))return GSP.get(key);
+ const pt=parts(k===2?1:0,k>=3?1:0,k===1||k===3||k===5?1:0,k>3?k-3:0),N=SW*SH,Q=new Float32Array(N),O=new Int8Array(N).fill(-1),UY=new Float32Array(N);
+ for(let y=0;y<SH;y++)for(let x=0;x<SW;x++){const nx=(x-CX)/PPU,ny=(y-CY)/PPU,i=y*SW+x;
+  pt.forEach((P,m)=>{let bq=9,bu=0;for(let j=0;j<P.p.length-1;j++){const A=P.p[j],B=P.p[j+1],vx=B[0]-A[0],vy=B[1]-A[1],t=cl(((nx-A[0])*vx+(ny-A[1])*vy)/(vx*vx+vy*vy||1),0,1),cx=A[0]+vx*t,cy=A[1]+vy*t,r=lp(A[2],B[2],t),q=Math.hypot(nx-cx,ny-cy)/r;if(q<bq){bq=q;bu=(ny-cy)/r}}
+   if(bq<=1.07){O[i]=m;Q[i]=bq;UY[i]=bu}})}
+ const Pm=new Float32Array(N*4);
+ for(let i=0;i<N;i++)if(O[i]>=0){const P=pt[O[i]],q=Q[i],a2=sm(1.07,.958,q),al=((Math.random()<a2?.82:0)+a2*.18)*(P.al||1);
+  let t=P.t;if(P.lit)t+=.22*sm(.4,-.9,UY[i]);const ro=sm(.8,1,q)*.5;t=t*(1-ro)+.72*ro;t+=(Math.random()-.5)*.22;
+  const rg=ramp(t),n=(Math.random()-.5)*18;for(let m=0;m<3;m++)Pm[i*4+m]=cl(rg[m]+n,0,255)/255*al;Pm[i*4+3]=al}
+ if(soft)box(Pm,SW,SH,2);
+ const o=document.createElement('canvas');o.width=SW;o.height=SH;const ox=o.getContext('2d'),im=ox.createImageData(SW,SH);
+ for(let i=0;i<N;i++){const al=Pm[i*4+3];if(al>.002){for(let m=0;m<3;m++)im.data[i*4+m]=Pm[i*4+m]/al*255;im.data[i*4+3]=al*255}}
+ ox.putImageData(im,0,0);GSP.set(key,o);return o}
+const unit=y=>cl(.3*R*(y-horizon)/camH,9,60);
+function upd(dt){gT+=dt;const u=unit(py);
+ if(st==='idle'){anT+=dt;if(anT>.4){an^=1;anT=0}
+  if(tgt){const dx=tgt.x-px,dy=tgt.y-py;const d0=Math.hypot(dx,dy);if(d0>3.2*u){if(Math.abs(dx)>4)face=dx>0?1:-1;quiet=0;if(d0>12*u&&!RM){st='fly';stT=0;vx=vy=0;alt=0}else{st='crouch';stT=0}return}}quiet+=dt}
+ else if(st==='crouch'){stT+=dt;if(stT>=(RM?0:.07)){const dx=tgt.x-px,dy=tgt.y-py,d=Math.hypot(dx,dy)||1,L=Math.min(3.4*u,d-1.6*u);
+  if(L<.5*u){st='idle';anT=0}else{hop={x0:px,y0:py,x1:px+dx/d*L,y1:py+dy/d*L,D:RM?L/180:.3,h:RM?0:u};st='hop';stT=0;hu=0}}}
+ else if(st==='hop'){stT+=dt;hu=Math.min(1,stT/hop.D);px=lp(hop.x0,hop.x1,hu);py=lp(hop.y0,hop.y1,hu);if(hu>=1){st='land';stT=0}}
+ else if(st==='fly'){stT+=dt;fl+=dt;const dx=tgt.x-px,dy=tgt.y-py,d=Math.hypot(dx,dy)||1,sp=Math.min(11*u,Math.max(0,d-1.6*u)*2.4),k=Math.min(1,dt*3.5);
+  vx+=(dx/d*sp-vx)*k;vy+=(dy/d*sp-vy)*k;px+=vx*dt;py+=vy*dt;if(Math.abs(vx)>12)face=vx>0?1:-1;
+  const near=d<5*u,ta=near?0:1.7*u+.25*u*Math.sin(gT*5);alt+=(ta-alt)*Math.min(1,dt*(near?3.2:2.2));
+  if(near&&alt<.12*u){alt=0;st='land';stT=0;vx=vy=0}}
+ else{stT+=dt;if(stT>=(RM?0:.06)){st='idle';anT=0}}}
+function gdraw(){g.setTransform(GD,0,0,GD,0,0);g.clearRect(0,0,GW,GH);
+ const u=unit(py),sc=u/PPU,r=(py-horizon)/camH/(F/(FZ+D0)),soft=r<.6||r>1.7,hp=st==='hop',k=st==='fly'?(Math.floor(fl*16)%2?5:4):hp?3:st==='crouch'||st==='land'?2:an,
+  ar=st==='fly'?alt:hp?4*hop.h*hu*(1-hu):0,ang=st==='fly'?-.25+vy/(11*u)*.3+.06*Math.sin(gT*14):hp&&!RM?-.5*(1-2*hu):0,fade=RM?1:cl((gT-1.2)/.6,0,1),lift=Math.min(1,ar/u),w=2.4*u*(1-.35*lift);
+ g.globalAlpha=fade*(1-.5*lift);g.drawImage(shCv,px-w/2,py-w*.14,w,w*.28);
+ g.globalAlpha=fade;g.save();g.translate(px,py-ar-.42*u);g.scale(face,1);g.rotate(ang);
+ g.drawImage(gsprite(k,soft),-CX*sc,-CY*sc,SW*sc,SH*sc);g.restore();g.globalAlpha=1}
+function gframe(ts){raf2=0;if(document.hidden)return;const dt=cl((ts-lst)/1000,0,.1);lst=ts;const n=Math.ceil(dt/.016)||1;for(let i=0;i<n;i++)upd(dt/n);gdraw();if(quiet<2.5||st!=='idle')raf2=requestAnimationFrame(gframe)}
+function wake2(){quiet=0;if(!raf2&&!document.hidden){lst=performance.now();raf2=requestAnimationFrame(gframe)}}
+function gsize(){GW=innerWidth;GH=innerHeight;GD=Math.min(devicePixelRatio||1,2);gc.width=GW*GD;gc.height=GH*GD;px=Math.min(px,GW);py=Math.min(py,GH*.96);wake2()}
+const tg=e=>{tgt={x:e.clientX,y:e.clientY};wake2()};
+addEventListener('pointermove',tg);addEventListener('pointerdown',tg);addEventListener('resize',gsize);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake2()});
+gsize();
+})();
 layout();
 </script></body></html>
